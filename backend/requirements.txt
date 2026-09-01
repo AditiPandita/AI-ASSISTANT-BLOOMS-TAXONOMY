@@ -1,0 +1,13 @@
+fastapi
+uvicorn[standard]
+python-multipart
+python-dotenv
+pydantic
+pypdf
+python-docx
+python-pptx
+sentence-transformers
+faiss-cpu
+numpy
+openai
+reportlab
