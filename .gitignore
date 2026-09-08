@@ -23,3 +23,14 @@ frontend/dist/
 # OS
 .DS_Store
 Thumbs.db
+
+# OCR temporary files
+page*.png
+handwritten_line*.png
+detected_line_*.png
+*_clean.png
+detected_lines_contact_sheet*.png
+line detected.zip
+
+# Uploaded test documents
+OB_2.pdf
