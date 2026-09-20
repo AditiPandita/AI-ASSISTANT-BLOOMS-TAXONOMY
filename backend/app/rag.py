@@ -1,5 +1,6 @@
 from app.embeddings import generate_embeddings
 from app.vector_store import VectorStore
+from app.llm import generate_answer
 
 
 def retrieve_context(
@@ -15,7 +16,6 @@ def retrieve_context(
             "context": ""
         }
 
-    # Convert user question into an embedding
     query_embedding = generate_embeddings([
         {
             "chunk_id": 0,
@@ -24,13 +24,11 @@ def retrieve_context(
         }
     ])[0]["embedding"]
 
-    # Search FAISS for relevant chunks
     results = vector_store.search(
         query_embedding,
         top_k=top_k
     )
 
-    # Build context for the LLM
     context_parts = []
 
     for result in results:
@@ -48,4 +46,38 @@ def retrieve_context(
         "query": query,
         "results": results,
         "context": context
+    }
+
+
+def answer_question(
+    query: str,
+    vector_store: VectorStore,
+    top_k: int = 3
+) -> dict:
+
+    retrieval_result = retrieve_context(
+        query,
+        vector_store,
+        top_k=top_k
+    )
+
+    context = retrieval_result["context"]
+
+    if not context:
+        return {
+            **retrieval_result,
+            "answer": (
+                "I could not find relevant information "
+                "in the uploaded document."
+            )
+        }
+
+    answer = generate_answer(
+        question=query,
+        context=context
+    )
+
+    return {
+        **retrieval_result,
+        "answer": answer
     }
