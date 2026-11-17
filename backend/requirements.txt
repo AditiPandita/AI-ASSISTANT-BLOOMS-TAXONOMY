@@ -12,3 +12,6 @@ numpy
 openai
 reportlab
 beautifulsoup4
+google-genai
+sqlalchemy
+psycopg[binary]
